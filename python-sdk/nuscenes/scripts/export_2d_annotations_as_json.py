@@ -1,6 +1,5 @@
 # nuScenes dev-kit.
 # Code written by Sergi Adipraja Widjaja, 2019.
-
 """
 Export 2D annotations (xmin, ymin, xmax, ymax) from re-projections of our annotated 3D bounding boxes to a .json file.
 
@@ -24,6 +23,7 @@ from tqdm import tqdm
 from nuscenes.nuscenes import NuScenes
 from nuscenes.utils.geometry_utils import view_points
 
+import pdb
 
 def post_process_coords(corner_coords: List,
                         imsize: Tuple[int, int] = (1600, 900)) -> Union[Tuple[float, float, float, float], None]:
@@ -93,7 +93,6 @@ def generate_record(ann_rec: dict,
     repro_rec['filename'] = filename
 
     return repro_rec
-
 
 def get_2d_boxes(sample_data_token: str, visibilities: List[str]) -> List[OrderedDict]:
     """
@@ -172,6 +171,8 @@ def main(args):
     sample_data_camera_tokens = [s['token'] for s in nusc.sample_data if (s['sensor_modality'] == 'camera') and
                                  s['is_key_frame']]
 
+    # pdb.set_trace()
+
     # For debugging purposes: Only produce the first n images.
     if args.image_limit != -1:
         sample_data_camera_tokens = sample_data_camera_tokens[:args.image_limit]
@@ -181,6 +182,10 @@ def main(args):
     for token in tqdm(sample_data_camera_tokens):
         reprojection_records = get_2d_boxes(token, args.visibilities)
         reprojections.extend(reprojection_records)
+
+        # if token == '1c81d6e6cbce5296594ffc510b0f51d3':
+        #     print("-----------------------------")
+        #     pdb.set_trace()
 
     # Save to a .json file.
     dest_path = os.path.join(args.dataroot, args.version)
@@ -195,8 +200,14 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Export 2D annotations from reprojections to a .json file.',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--dataroot', type=str, default='/data/sets/nuscenes', help="Path where nuScenes is saved.")
-    parser.add_argument('--version', type=str, default='v1.0-trainval', help='Dataset version.')
+    # parser.add_argument('--dataroot', type=str, default='/data/sets/nuscenes', help="Path where nuScenes is saved.")
+    # parser.add_argument('--version', type=str, default='v1.0-trainval', help='Dataset version.')
+    # parser.add_argument('--dataroot', type=str, default='/mnt/data1/public_datasets/Odaiba_JT_v1.0', help="Path where nuScenes is saved.")
+    # parser.add_argument('--version', type=str, default='b449e9eb-daeb-4934-89c7-c97ddbc3a615/annotation', help='Dataset version.')
+    parser.add_argument('--dataroot', type=str, default='/home/sc/work/autoware_lab/Odaiba_JT_v1.0', help="Path where nuScenes is saved.")
+    parser.add_argument('--version', type=str, default='1cf17b50-551f-4597-b589-01edf4b1302a/annotation', help='Dataset version.')
+                
+
     parser.add_argument('--filename', type=str, default='image_annotations.json', help='Output filename.')
     parser.add_argument('--visibilities', type=str, default=['', '1', '2', '3', '4'],
                         help='Visibility bins, the higher the number the higher the visibility.', nargs='+')
