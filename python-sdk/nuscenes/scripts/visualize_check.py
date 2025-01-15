@@ -4,10 +4,6 @@ import json
 
 from collections import defaultdict
 
-"""
-/mnt/data1/public_datasets/Odaiba_JT_v1.0/b449e9eb-daeb-4934-89c7-c97ddbc3a615
-"""
-
 class AnnotationInfo:
     def __init__(self):
         pass
@@ -61,6 +57,8 @@ def visualize_bboxes(json_file, root_dir):
         print(f"Saved image with bounding box: {save_name}")
 
 
-rootdir = "/mnt/data1/public_datasets/Odaiba_JT_v1.0/b449e9eb-daeb-4934-89c7-c97ddbc3a615"
+# rootdir = "/mnt/data1/public_datasets/Odaiba_JT_v1.0/b449e9eb-daeb-4934-89c7-c97ddbc3a615"
+rootdir = "/home/adas/dataset/Odaiba_JT_v1.0/bee54781-559c-418d-94aa-b0ad005d6dfd"
 json_file = os.path.join(rootdir, 'annotation/image_annotations.json')
 visualize_bboxes(json_file, rootdir)
+
